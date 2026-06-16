@@ -4,8 +4,7 @@
   "private": true,
   "description": "Figma Prototype Mode for Live Websites",
   "scripts": {
-    "dev": "node server.js",
-    "start": "node server.js"
+    "dev": "node server.js"
   },
   "engines": {
     "node": ">=18"
