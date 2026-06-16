@@ -6,7 +6,7 @@ const net = require("net");
 const { URL } = require("url");
 
 const PORT = Number(process.env.PORT || 3000);
-const ROOT = __dirname;
+const ROOT = path.join(__dirname, "public");
 const PROXY_TIMEOUT_MS = Number(process.env.PROXY_TIMEOUT_MS || 18000);
 const MAX_PROXY_REDIRECTS = 5;
 
