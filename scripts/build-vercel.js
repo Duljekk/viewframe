@@ -24,8 +24,8 @@ function copyFunction(name) {
     runtime: "nodejs22.x",
     handler: `${name}.js`,
     launcherType: "Nodejs",
-    shouldAddHelpers: true,
-    shouldAddSourcemapSupport: true,
+    shouldAddHelpers: false,
+    shouldAddSourcemapSupport: false,
     maxDuration: 20
   });
 }
