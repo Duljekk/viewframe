@@ -360,8 +360,14 @@ function handleVercelProxy(req, res) {
 function createServer() {
   return http.createServer((req, res) => {
     const requestUrl = new URL(req.url, `http://${req.headers.host || "localhost"}`);
-    if (requestUrl.pathname === "/proxy") {
+    if (requestUrl.pathname === "/proxy" || requestUrl.pathname === "/api/proxy") {
       handleProxy(req, res, requestUrl);
+      return;
+    }
+    if (requestUrl.pathname === "/api/health") {
+      send(res, 200, JSON.stringify({ ok: true, service: "viewframe", runtime: "local" }), {
+        "Content-Type": "application/json; charset=utf-8"
+      });
       return;
     }
     handleStatic(req, res, requestUrl);

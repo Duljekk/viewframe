@@ -15,8 +15,9 @@ Open `http://localhost:3000`.
 This project is ready for Vercel as a static app with one Node.js function:
 
 - `index.html`, `styles.css`, and `app.js` are served as static assets.
-- `/proxy` is rewritten to `api/proxy.js` by `vercel.json`.
-- The proxy code is shared with local development through `server.js`.
+- Live previews are proxied through `/api/proxy`.
+- `npm run build` emits explicit Vercel Build Output API files in `.vercel/output`.
+- The local development proxy runs through `server.js`.
 
 Deploy from the Vercel dashboard or CLI:
 
@@ -24,7 +25,7 @@ Deploy from the Vercel dashboard or CLI:
 vercel
 ```
 
-Use the default project settings. No build command or output directory is required.
+Use the default project settings. The repository's `vercel.json` sets the build command.
 
 ## Implemented
 

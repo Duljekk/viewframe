@@ -4,6 +4,7 @@
   "private": true,
   "description": "Figma Prototype Mode for Live Websites",
   "scripts": {
+    "build": "node scripts/build-vercel.js",
     "dev": "node server.js",
     "start": "node server.js"
   },

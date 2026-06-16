@@ -129,7 +129,7 @@ function estimateOuterSize(device) {
 }
 
 function proxyUrl(url) {
-  return `/proxy?url=${encodeURIComponent(url)}`;
+  return `/api/proxy?url=${encodeURIComponent(url)}`;
 }
 
 function previewKeyFor(device) {
