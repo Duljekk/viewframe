@@ -23,11 +23,37 @@ const MIME_TYPES = {
 };
 
 function send(res, status, body, headers = {}) {
-  res.writeHead(status, {
+  const responseHeaders = {
     "Cache-Control": "no-store",
     ...headers
-  });
-  res.end(body);
+  };
+
+  if (typeof res.writeHead === "function") {
+    res.writeHead(status, responseHeaders);
+  } else {
+    res.statusCode = status;
+    Object.entries(responseHeaders).forEach(([key, value]) => {
+      if (typeof res.setHeader === "function") {
+        res.setHeader(key, value);
+      } else if (typeof res.set === "function") {
+        res.set(key, value);
+      }
+    });
+  }
+
+  if (typeof res.end === "function") {
+    res.end(body);
+    return;
+  }
+
+  if (typeof res.status === "function" && typeof res.send === "function") {
+    res.status(status).send(body);
+    return;
+  }
+
+  if (typeof res.send === "function") {
+    res.send(body);
+  }
 }
 
 function escapeHtml(value) {
@@ -310,12 +336,25 @@ function handleStatic(req, res, requestUrl) {
 }
 
 function requestUrlFor(req) {
-  const protocol = req.headers["x-forwarded-proto"] || "http";
-  return new URL(req.url || "/", `${protocol}://${req.headers.host || "localhost"}`);
+  const headers = req.headers || {};
+  const protocol = headers["x-forwarded-proto"] || "http";
+  return new URL(req.url || "/", `${protocol}://${headers.host || "localhost"}`);
 }
 
 function handleVercelProxy(req, res) {
-  return handleProxy(req, res, requestUrlFor(req));
+  try {
+    return Promise.resolve(handleProxy(req, res, requestUrlFor(req))).catch((error) => {
+      send(res, 500, "Proxy function failed.", {
+        "Content-Type": "text/plain; charset=utf-8",
+        "X-Viewframe-Error": error.name || "Error"
+      });
+    });
+  } catch (error) {
+    send(res, 500, "Proxy function failed.", {
+      "Content-Type": "text/plain; charset=utf-8",
+      "X-Viewframe-Error": error.name || "Error"
+    });
+  }
 }
 
 function createServer() {
