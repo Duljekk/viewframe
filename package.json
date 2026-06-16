@@ -1,0 +1,13 @@
+{
+  "name": "viewframe",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Figma Prototype Mode for Live Websites",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

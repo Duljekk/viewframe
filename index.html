@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Viewframe</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark">V</span>
+          <div>
+            <strong>Viewframe</strong>
+            <span>Live responsive boards</span>
+          </div>
+        </div>
+
+        <form class="url-form" id="urlForm">
+          <input id="urlInput" type="url" spellcheck="false" placeholder="https://example.com" aria-label="Website URL">
+          <button type="submit">Go</button>
+        </form>
+
+        <div class="toolbar-group" aria-label="Canvas controls">
+          <button class="icon-button" id="zoomOut" title="Zoom out" aria-label="Zoom out">-</button>
+          <button class="zoom-pill" id="zoomReset" title="Reset zoom">100%</button>
+          <button class="icon-button" id="zoomIn" title="Zoom in" aria-label="Zoom in">+</button>
+          <button class="icon-button" id="fitBoard" title="Fit board" aria-label="Fit board">[]</button>
+        </div>
+
+        <div class="segmented" aria-label="Scaling mode">
+          <button id="fitScaleButton" class="active" type="button">Fit</button>
+          <button id="actualScaleButton" type="button">Actual</button>
+        </div>
+
+        <div class="toolbar-group" aria-label="Sync controls">
+          <label class="toggle">
+            <input id="navSync" type="checkbox" checked>
+            <span>Nav</span>
+          </label>
+          <label class="toggle">
+            <input id="scrollSync" type="checkbox">
+            <span>Scroll</span>
+          </label>
+        </div>
+
+        <div class="toolbar-group" aria-label="Export controls">
+          <button id="exportBoard" type="button">PNG</button>
+          <button id="exportSelected" type="button">Selected</button>
+        </div>
+      </header>
+
+      <aside class="sidebar left-panel">
+        <section>
+          <div class="section-title">
+            <span>Devices</span>
+            <button id="clearBoard" class="text-button" type="button">Clear</button>
+          </div>
+          <div id="deviceLibrary" class="device-library"></div>
+        </section>
+
+        <section>
+          <div class="section-title">
+            <span>Custom</span>
+          </div>
+          <form class="custom-device" id="customDeviceForm">
+            <input id="customName" type="text" placeholder="Name" value="Custom">
+            <div class="split-inputs">
+              <input id="customWidth" type="number" min="240" max="3840" value="1440" aria-label="Width">
+              <input id="customHeight" type="number" min="240" max="2400" value="900" aria-label="Height">
+            </div>
+            <select id="customKind" aria-label="Device kind">
+              <option value="desktop">Desktop</option>
+              <option value="laptop">Laptop</option>
+              <option value="tablet">Tablet</option>
+            </select>
+            <button type="submit">Add Custom</button>
+          </form>
+        </section>
+      </aside>
+
+      <main class="canvas-stage" id="canvasStage">
+        <div class="canvas-hud">
+          <button id="groupSelection" type="button">Group</button>
+          <button id="ungroupSelection" type="button">Ungroup</button>
+          <span id="selectionCount">0 selected</span>
+        </div>
+        <div class="canvas-grid" id="canvasGrid"></div>
+        <div class="canvas-world" id="canvasWorld"></div>
+      </main>
+
+      <aside class="sidebar right-panel">
+        <section>
+          <div class="section-title">
+            <span>Inspector</span>
+          </div>
+          <div id="inspector" class="inspector-empty">Select a frame</div>
+        </section>
+        <section>
+          <div class="section-title">
+            <span>Board</span>
+          </div>
+          <div class="stat-list">
+            <div><span>Frames</span><strong id="frameCount">0</strong></div>
+            <div><span>URL</span><strong id="currentUrl">-</strong></div>
+            <div><span>Mode</span><strong id="currentMode">Fit</strong></div>
+          </div>
+        </section>
+      </aside>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="/app.js"></script>
+  </body>
+</html>
