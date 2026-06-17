@@ -54,6 +54,11 @@ button:hover {
   border-color: #94aaa4;
 }
 
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
 button:active {
   transform: translateY(1px);
 }

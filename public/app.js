@@ -67,6 +67,8 @@ const nodes = {
   customKind: document.getElementById("customKind"),
   groupSelection: document.getElementById("groupSelection"),
   ungroupSelection: document.getElementById("ungroupSelection"),
+  rotateSelection: document.getElementById("rotateSelection"),
+  fullscreenSelection: document.getElementById("fullscreenSelection"),
   selectionCount: document.getElementById("selectionCount"),
   frameCount: document.getElementById("frameCount"),
   currentUrl: document.getElementById("currentUrl"),
@@ -157,6 +159,12 @@ function isDeviceInViewport(device) {
     left <= rect.width + margin &&
     top <= rect.height + margin
   );
+}
+
+function selectedDevice() {
+  if (state.selectedIds.size !== 1) return null;
+  const [id] = state.selectedIds;
+  return state.devices.find((device) => device.id === id) || null;
 }
 
 function updateVisibleIds() {
@@ -396,12 +404,15 @@ function lazyPreviewMarkup(dims) {
 }
 
 function renderStats() {
+  const hasSingleSelection = !!selectedDevice();
   nodes.frameCount.textContent = String(state.devices.length);
   nodes.currentUrl.textContent = new URL(state.url).host;
   nodes.currentMode.textContent = state.scaling === "fit" ? "Fit" : "Actual";
   nodes.fitScaleButton.classList.toggle("active", state.scaling === "fit");
   nodes.actualScaleButton.classList.toggle("active", state.scaling === "actual");
   nodes.selectionCount.textContent = `${state.selectedIds.size} selected`;
+  nodes.rotateSelection.disabled = !hasSingleSelection;
+  nodes.fullscreenSelection.disabled = !hasSingleSelection;
   nodes.navSync.checked = state.navSync;
   nodes.scrollSync.checked = state.scrollSync;
 }
@@ -643,8 +654,7 @@ function handleDeviceAction(id, action) {
   }
 
   if (action === "rotate") {
-    device.orientation = device.orientation === "portrait" ? "landscape" : "portrait";
-    device.reloadKey += 1;
+    rotateDevice(device);
   }
 
   if (action === "duplicate") {
@@ -659,6 +669,30 @@ function handleDeviceAction(id, action) {
   }
 
   render();
+}
+
+function rotateDevice(device) {
+  device.orientation = device.orientation === "portrait" ? "landscape" : "portrait";
+  device.reloadKey += 1;
+}
+
+function rotateSelectedMockup() {
+  const device = selectedDevice();
+  if (!device) {
+    toast("Select one frame to rotate");
+    return;
+  }
+  rotateDevice(device);
+  render();
+}
+
+function fullscreenSelectedMockup() {
+  const device = selectedDevice();
+  if (!device) {
+    toast("Select one frame for fullscreen");
+    return;
+  }
+  openFullscreen(device.id);
 }
 
 function openFullscreen(id) {
@@ -963,6 +997,8 @@ nodes.customDeviceForm.addEventListener("submit", (event) => {
 });
 nodes.groupSelection.addEventListener("click", groupSelection);
 nodes.ungroupSelection.addEventListener("click", ungroupSelection);
+nodes.rotateSelection.addEventListener("click", rotateSelectedMockup);
+nodes.fullscreenSelection.addEventListener("click", fullscreenSelectedMockup);
 
 window.addEventListener("message", (event) => {
   const data = event.data || {};
